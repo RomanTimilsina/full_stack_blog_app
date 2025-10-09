@@ -383,6 +383,10 @@
             }
         }
 
+            .pressable {
+                text-decoration: underline;
+                cursor: pointer;
+            }
             .buttons {
                 display: flex;
                 gap: 20px;
