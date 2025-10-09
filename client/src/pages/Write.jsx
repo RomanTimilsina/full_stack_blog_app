@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ReactQuill from 'react-quill-new';
 import "react-quill-new/dist/quill.snow.css"; // add default styling
 import { AuthContext } from '../context/authContext';
@@ -7,17 +7,38 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const Write = () => {
 
-    const [value, setValue] = useState('')
-    const [title, setTitle] = useState('')
+    const state = useLocation().state
+    const [value, setValue] = useState(state?.desc || '')
+    const [title, setTitle] = useState(state?.title || '')
     const [img, setImg] = useState(null)
-    const [cat, setCat] = useState('')
+    const [cat, setCat] = useState(state?.cat || '')
     
     const query = new URLSearchParams(useLocation().search);
     const isEditMode = query.has("edit");
     const postId = query.get("edit"); 
-    console.log(postId)
+    console.log('postID:',postId)
     const navigate = useNavigate()
 
+useEffect(() => {
+  const fetchData = async () => {
+    if (!isEditMode) return;
+
+    try {
+      const res = await axios.get(`/posts/${postId}`);
+      console.log('response', res.data);
+
+    //   setTitle(res.data.title || '');
+    //   setValue(res.data.desc || '');
+    //   setCat(res.data.cat || '');
+      // If you want to handle the image:
+      // setImg(res.data.img || null);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  fetchData();
+}, [isEditMode, postId]);
 
     const publish = async () => {
         const newPost = {
@@ -43,6 +64,7 @@ const Write = () => {
             if (isEditMode) {
                 console.log(postId)
                 const res = await axios.put(`/posts/${postId}`, newPost, {withCredentials: true})
+                navigate('/')
 
             } else {
                 const res = await axios.post('/posts', newPost, {withCredentials: true})
@@ -82,27 +104,27 @@ const Write = () => {
                 <h1>Category</h1>
                 <div className='categories'>
                 <div className='category'>
-                    <input type="radio" name='cat' value='art' id='art' onChange={e => setCat(e.target.value)} />
+                    <input type="radio" checked={cat === 'art'} name='cat' value='art' id='art' onChange={e => setCat(e.target.value)} />
                     <label htmlFor="art">Art</label>
                 </div>
                 <div className='category'>
-                    <input type="radio" name='cat' value='science' id='science' onChange={e => setCat(e.target.value)} />
+                    <input type="radio" checked={cat === 'science'} name='cat' value='science' id='science' onChange={e => setCat(e.target.value)} />
                     <label htmlFor="science">Science</label>
                 </div>
                 <div className='category'>
-                    <input type="radio" name='cat' value='technology' id='technology' onChange={e => setCat(e.target.value)} />
+                    <input type="radio" checked={cat === 'technology'} name='cat' value='technology' id='technology' onChange={e => setCat(e.target.value)} />
                     <label htmlFor="technology">Technology</label>
                 </div>
                 <div className='category'>
-                    <input type="radio" name='cat' value='cinema' id='cinema' onChange={e => setCat(e.target.value)} />
+                    <input type="radio" checked={cat === 'cinema'} name='cat' value='cinema' id='cinema' onChange={e => setCat(e.target.value)} />
                     <label htmlFor="cinema">Cinema</label>
                 </div>
                 <div className='category'>
-                    <input type="radio" name='cat' value='design' id='design' onChange={e => setCat(e.target.value)} />
+                    <input type="radio" checked={cat === 'design'} name='cat' value='design' id='design' onChange={e => setCat(e.target.value)} />
                     <label htmlFor="design">Design</label>
                 </div>
                 <div className='category'>
-                    <input type="radio" name='cat' value='food' id='food' onChange={e => setCat(e.target.value)} />
+                    <input type="radio" checked={cat === 'food'} name='cat' value='food' id='food' onChange={e => setCat(e.target.value)} />
                     <label htmlFor="food">Food</label>
                 </div>
             </div>

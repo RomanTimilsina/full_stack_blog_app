@@ -16,6 +16,8 @@ const Single = () => {
     const location = useLocation()
     const path = location.pathname.split('/')[2]
     console.log('postId:',post)
+    console.log('path:',path)
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -53,7 +55,7 @@ const Single = () => {
                 {
                 currentUser?.id === post?.uid &&
                 <div className="edit">
-                    <Link to={`/write?edit=${post.id}`}>
+                    <Link to={`/write?edit=${path}`} state={post}>
                     <img src={Edit} alt="" />
                     </Link>
                     <img onClick={handleDelete} src={Delete} alt="" />
