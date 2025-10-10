@@ -8,10 +8,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const Write = () => {
 
     const state = useLocation().state
-    const [value, setValue] = useState(state?.desc || '')
-    const [title, setTitle] = useState(state?.title || '')
+    const [value, setValue] = useState('')
+    const [title, setTitle] = useState( '')
     const [img, setImg] = useState(null)
-    const [cat, setCat] = useState(state?.cat || '')
+    const [cat, setCat] = useState( '')
     
     const query = new URLSearchParams(useLocation().search);
     const isEditMode = query.has("edit");
@@ -27,11 +27,11 @@ useEffect(() => {
       const res = await axios.get(`/posts/${postId}`);
       console.log('response', res.data);
 
-    //   setTitle(res.data.title || '');
-    //   setValue(res.data.desc || '');
-    //   setCat(res.data.cat || '');
+      setTitle(res.data.title || '');
+      setValue(res.data.desc || '');
+      setCat(res.data.cat || '');
       // If you want to handle the image:
-      // setImg(res.data.img || null);
+      setImg(res.data.img || null);
     } catch (err) {
       console.log(err);
     }

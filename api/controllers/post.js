@@ -84,21 +84,21 @@ export const updatePost = (req, res) => {
 
     const q = `
       UPDATE posts 
-      SET title = ?, \`desc\` = ?, img = ?,  cat = ?
+      SET title = COALESCE(?, title), \`desc\` = COALESCE(?, \`desc\`), img = COALESCE(?, img),  cat = COALESCE(?, cat)
       WHERE id = ? AND uid = ?;
     `;
 
     const values = [
       req.body.title,
       req.body.desc,
-      req.body.img || '',
+      req.body.img,
       req.body.cat
     ];
 
     db.query(q, [...values, postId, userInfo.id], (err, data) => {
-    //   if (err) {
-    //     return res.status(500).json("Database error");
-    //   }
+      if (err) {
+        return res.status(500).json("Database error");
+      }
       console.log("updating", postId)
       return res.status(200).json("Post updated successfully!");
 

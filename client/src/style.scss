@@ -136,10 +136,13 @@
         .posts {
             width: 1024px;
             
+            
             .post {
                 display: flex;
                 gap:150px ;
-                margin-top: 50px;
+                border: 1px solid lightgrey;
+            padding: 50px;
+            margin: 50px;
                 .img {
                     flex:1;
                     position: relative;
